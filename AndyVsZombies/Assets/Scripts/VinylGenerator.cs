@@ -5,7 +5,7 @@ using UnityEngine;
 public class VinylGenerator : MonoBehaviour {
 
 	public Rigidbody2D vinyl;
-	private int counter;
+	public int counter;
 
 	// Use this for initialization
 	void Start () {
@@ -20,9 +20,13 @@ public class VinylGenerator : MonoBehaviour {
 		if (counter == 0) {
 			counter++;
 
-				Rigidbody2D vinylClone = (Rigidbody2D)Instantiate (vinyl, transform.position, transform.rotation);
+			Rigidbody2D vinylClone = (Rigidbody2D)Instantiate (vinyl, transform.position, transform.rotation);
 
 		}
 		
+	}
+
+	public void CreateVinyl() {
+		Rigidbody2D vinylClone = (Rigidbody2D)Instantiate (vinyl, transform.position, transform.rotation);
 	}
 }

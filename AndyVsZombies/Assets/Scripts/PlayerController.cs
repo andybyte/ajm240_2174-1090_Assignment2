@@ -10,9 +10,12 @@ public class PlayerController : MonoBehaviour {
 	private SpriteRenderer playerSprite ;
 	private string spriteDirection;
 
-	public float pickUpDistance = 1.0f;
-	private Transform carriedVinyl = null;
-	private int pickupLayer = 1 << LayerMask.NameToLayer( "Pickup" );
+	private Rigidbody2D vinyl;
+
+
+//	public float pickUpDistance = 1.0f;
+//	private Transform carriedVinyl = null;
+//	private int pickupLayer = 1; //<< LayerMask.NameToLayer( "Pickup" );
 
 
 	// Use this for initialization
@@ -51,8 +54,9 @@ public class PlayerController : MonoBehaviour {
 			playerSprite.flipX = true;
 		}
 
-		if (Input.GetMouseButton (KeyCode.Mouse0)) {
-			PickUpVinyl ();
+		if (Input.GetKeyDown (KeyCode.Mouse0)) {
+			var script = vinyl.GetComponent<VinylBehavior> ();
+			script.state = 2;
 		}
 	}
 	
@@ -65,29 +69,39 @@ public class PlayerController : MonoBehaviour {
 			crashSound.Play();
 			Destroy (other.gameObject);
 		}
-	}
 
-	private void PickUp() {
-		Collider[] pickups = Physics.OverlapSphere (transform.position, pickUpDistance, pickupLayer);
-
-
-		// Find the closest
-		float dist = Mathf.Infinity;
-		for (int i = 0; i < pickups.Length; i++) {
-			float newDist = (transform.position - pickups [i].transform.position).sqrMagnitude;
-			if (newDist < dist) {
-				carriedVinyl = pickups [i].transform;
-				dist = newDist;
-			}
-		}
-
-		if (carriedVinyl != null) { // Check if we found something
-			// Set the box in front of character
-			Destroy (carriedVinyl.rigidbody);
-			carriedVinyl.parent = transform;
-			carriedVinyl.localPosition = new Vector3 (0, 1f, 1f); // Might need to change that 
+		if (other.gameObject.CompareTag ("vinyl")) {
+			vinyl = other.GetComponent<Rigidbody2D> ();
+			var script = other.GetComponent<VinylBehavior>();
+			script.state = 1;
+//			other.transform.position = this.transform.position;
 		}
 	}
+
+
+		
+
+//	private void PickUpVinyl() {
+//		Collider[] pickups = Physics.OverlapSphere (transform.position, pickUpDistance, pickupLayer);
+//
+//
+//		// Find the closest
+//		float dist = Mathf.Infinity;
+//		for (int i = 0; i < pickups.Length; i++) {
+//			float newDist = (transform.position - pickups [i].transform.position).sqrMagnitude;
+//			if (newDist < dist) {
+//				carriedVinyl = pickups [i].transform;
+//				dist = newDist;
+//			}
+//		}
+//
+//		if (carriedVinyl != null) { // Check if we found something
+//			// Set the box in front of character
+//			Destroy (carriedVinyl.GetComponent<Rigidbody>());
+//			carriedVinyl.parent = transform;
+//			carriedVinyl.localPosition = new Vector3 (0, 1f, 1f); // Might need to change that 
+//		}
+//	}
 
 		
 }
