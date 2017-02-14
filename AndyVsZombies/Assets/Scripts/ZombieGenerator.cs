@@ -19,7 +19,7 @@ public class ZombieGenerator : MonoBehaviour {
 	void Update () {
 		counter++;
 		if (counter % frameDelta == 0) {
-			for (int i = 0; i < Random.Range (1, 5); i++) {
+			for (int i = 0; i < Random.Range (1, 3); i++) {
 				Rigidbody2D zombieClone = (Rigidbody2D)Instantiate (zombie, transform.position, transform.rotation);
 			}
 		}

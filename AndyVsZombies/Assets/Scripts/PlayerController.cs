@@ -24,15 +24,12 @@ public class PlayerController : MonoBehaviour {
 
 		if (player.position.x < -9.4f & move.x < 0.0f) {
 			move.x = 0.0f;
-//			transform.position += move * speed * Time.deltaTime;
 		} 
 		if (player.position.x > 9.21f & move.x > 0.0f) {
 			move.x = 0.0f;
-//			transform.position += move * speed * Time.deltaTime;
 		} 
 		if (player.position.y > 4.1f & move.y > 0.0f) {
 			move.y = 0.0f;
-//			transform.position += move * speed * Time.deltaTime;
 		} 
 		if (player.position.y < -3.83f & move.y < 0.0f) {
 			move.y = 0.0f;

@@ -6,17 +6,21 @@ public class ZombieBehavior : MonoBehaviour {
 
 	private float speed;
 	private float posY;
+	private float posX;
 
 	// Use this for initialization
 	void Start () {
 
 		// Set random speed of the zombie #TODO
-		speed = 0.03f;
+		speed = Random.Range(0.01f,0.05f);
 
 		// -4 to 2 upper/lower limits ; relative to the pivot center of the background.
-		posY = Random.Range (-4.0f, 2.0f);
+		posY = Random.Range (-4.0f, 4.14f);
 
-		// Set X to be off screen #TODO	
+		// Set X to be off screen
+		posX = 11.0f;
+
+		transform.position = new Vector3 (posX, posY);
 	}
 	
 	// Update is called once per frame
