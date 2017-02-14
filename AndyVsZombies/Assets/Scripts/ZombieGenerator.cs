@@ -8,17 +8,19 @@ public class ZombieGenerator : MonoBehaviour {
 	public int frameDelta;
 	private int counter;
 
-	// Use this for initialization
+	// Use this for initialization.
 	void Start () {
 
-		// Initialize counter
+		// Initialize counter.
 		counter = 1;
 	}
 	
-	// Update is called once per frame
+	// Update is called once per frame.
 	void Update () {
 		counter++;
 		if (counter % frameDelta == 0) {
+
+			// Clone up to 3 zombies.
 			for (int i = 0; i < Random.Range (1, 3); i++) {
 				Rigidbody2D zombieClone = (Rigidbody2D)Instantiate (zombie, transform.position, transform.rotation);
 			}

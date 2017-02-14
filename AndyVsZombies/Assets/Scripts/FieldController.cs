@@ -16,7 +16,7 @@ public class FieldController : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D other){
 		if (other.gameObject.CompareTag ("Zombie")) {
-			crashSound.Play();
+//			crashSound.Play();
 			Destroy (other.gameObject);
 		}
 	}

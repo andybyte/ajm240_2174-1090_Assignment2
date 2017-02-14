@@ -10,6 +10,11 @@ public class PlayerController : MonoBehaviour {
 	private SpriteRenderer playerSprite ;
 	private string spriteDirection;
 
+	public float pickUpDistance = 1.0f;
+	private Transform carriedVinyl = null;
+	private int pickupLayer = 1 << LayerMask.NameToLayer( "Pickup" );
+
+
 	// Use this for initialization
 	void Start () {
 		player = GetComponent<Rigidbody2D>();
@@ -45,6 +50,10 @@ public class PlayerController : MonoBehaviour {
 			spriteDirection = "right";
 			playerSprite.flipX = true;
 		}
+
+		if (Input.GetMouseButton (KeyCode.Mouse0)) {
+			PickUpVinyl ();
+		}
 	}
 	
 	// Update is called once per frame
@@ -57,4 +66,28 @@ public class PlayerController : MonoBehaviour {
 			Destroy (other.gameObject);
 		}
 	}
+
+	private void PickUp() {
+		Collider[] pickups = Physics.OverlapSphere (transform.position, pickUpDistance, pickupLayer);
+
+
+		// Find the closest
+		float dist = Mathf.Infinity;
+		for (int i = 0; i < pickups.Length; i++) {
+			float newDist = (transform.position - pickups [i].transform.position).sqrMagnitude;
+			if (newDist < dist) {
+				carriedVinyl = pickups [i].transform;
+				dist = newDist;
+			}
+		}
+
+		if (carriedVinyl != null) { // Check if we found something
+			// Set the box in front of character
+			Destroy (carriedVinyl.rigidbody);
+			carriedVinyl.parent = transform;
+			carriedVinyl.localPosition = new Vector3 (0, 1f, 1f); // Might need to change that 
+		}
+	}
+
+		
 }
