@@ -58,11 +58,10 @@ public class PlayerController : MonoBehaviour {
 
 			// Use camera.WorldToScreenPoint to set boundaries of player and prevent player from moving off the level..
 			Vector3 screenPos = camera.WorldToScreenPoint(player.position);
-
 			if (screenPos.x < 30 & move.x < 0.0f) {
 				move.x = 0.0f;
 			} 
-			if (screenPos.x > 1250 & move.x > 0.0f) {
+			if (screenPos.x > 907 & move.x > 0.0f) {
 				move.x = 0.0f;
 			} 
 			if (player.position.y > 4.1f & move.y > 0.0f) {
@@ -130,7 +129,7 @@ public class PlayerController : MonoBehaviour {
 
 			if (intLives == 0) {
 				youLose.Play ();
-				dinner.text = "Nice try but you were served.";
+				dinner.text = "Nice try but you were eaten.";
 
 			}
 		}
