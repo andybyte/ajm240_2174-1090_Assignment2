@@ -63,7 +63,13 @@ public class VinylBehavior : MonoBehaviour {
 			Destroy (other.gameObject);
 			soundFX.Play();
 			smash.Play ();
+			player.GetComponent<PlayerController> ().intKills += 1;
 			this.transform.position = new Vector3 (12.1f, 0.0f, 0.0f);
+			if (player.GetComponent<PlayerController> ().intKills == 20) {
+				player.GetComponent<PlayerController> ().youWin.Play ();
+				player.GetComponent<PlayerController> ().winner.text = "You Win!\nHail To The King, Baby!";
+
+			}
 		}
 	}
 

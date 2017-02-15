@@ -13,7 +13,7 @@ public class ZombieBehavior : MonoBehaviour {
 	void Start () {
 
 		// Set random speed of the zombie. #DONE
-		speed = Random.Range(0.01f,0.05f);
+		speed = Random.Range(0.01f,0.03f);
 
 		// -4 to 2 upper/lower limits ; relative to the pivot center of the background.
 		posY = Random.Range (-4.0f, 4.14f);

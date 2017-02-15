@@ -1,12 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
+	public Text winner;
+	public Text dinner;
 	public Rigidbody2D player;
+	public Text lives;
+	public int intLives;
+	public Text kills;
+	public int intKills;
 	public int speed;
-	public AudioSource crashSound;
+	public AudioSource collisionSound;
+	public AudioSource zombieBite;
+	public AudioSource youWin;
+	public AudioSource youLose;
 	private SpriteRenderer playerSprite ;
 	private VinylBehavior script;
 	private bool keypress;
@@ -19,10 +29,17 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		winner.text = " ";
+		dinner.text = " ";
+
 		player = GetComponent<Rigidbody2D>();
 		playerSprite = GetComponent<SpriteRenderer> ();
 		spriteDirection = "right";
 		contact = false;
+		intLives = 5;
+		intKills = 0;
+		UpdateKills (intKills);
+		UpdateLives (intLives);
 	}
 
 	void Update () {
@@ -36,7 +53,7 @@ public class PlayerController : MonoBehaviour {
 		if (screenPos.x < 30 & move.x < 0.0f) {
 			move.x = 0.0f;
 		} 
-		if (screenPos.x > 1200 & move.x > 0.0f) {
+		if (screenPos.x > 1250 & move.x > 0.0f) {
 			move.x = 0.0f;
 		} 
 		if (player.position.y > 4.1f & move.y > 0.0f) {
@@ -76,14 +93,25 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
-
+		UpdateKills (intKills); 
 			
 	}
 
 	void OnTriggerEnter2D (Collider2D other){
 		if (other.gameObject.CompareTag ("Zombie")) {
-			crashSound.Play();
+			collisionSound.Play();
+			zombieBite.Play ();
+			intLives -= 1;
+			UpdateLives (intLives);
+			Vector3 pos = new Vector3(-5.0f,0.0f,0.0f);
+			player.transform.position = pos;
 			Destroy (other.gameObject);
+
+			if (intLives == 0) {
+				youLose.Play ();
+				dinner.text = "Nice try but you were served.";
+
+			}
 		}
 		if (other.gameObject.CompareTag ("vinyl")) {
 			vinyl = other.GetComponent<Rigidbody2D> ();
@@ -97,4 +125,12 @@ public class PlayerController : MonoBehaviour {
 			contact = false;
 		}
 	}		
+
+	void UpdateLives(int count) {
+		lives.text = "Lives " + count;
+	}
+
+	void UpdateKills(int count) {
+		kills.text = "Kills " + count;
+	}
 }
