@@ -4,35 +4,32 @@ using UnityEngine;
 
 public class VinylBehavior : MonoBehaviour {
 
-	public VinylGenerator vinylGen;
 	public float speed;
 	private Vector3 target;
 	public int state = 0;
 	private Rigidbody2D self;
 	private Rigidbody2D player;
+	public AudioSource soundFX;
+	public AudioSource smash;
+	public Sprite [] arrayVinyls;
+	public Rigidbody2D spinner;
+	private Vector3 moveDirection;
+
 
 	// Use this for initialization
 	void Start () {
 
 		self = this.GetComponent<Rigidbody2D>();
-		vinylGen = GetComponent<VinylGenerator> ();
 
-		// Set initial position of zombie.
+		// Set initial position of vinyl.
 		transform.position = new Vector3 (-9.0f, -10.0f);
-//
-//		// Set random speed of the zombie. #DONE
-//		speed = Random.Range(0.01f,0.05f);
-//
-//		// -4 to 2 upper/lower limits ; relative to the pivot center of the background.
-//		posY = Random.Range (-4.0f, 4.14f);
-//
-//		// Set X to be off screen. #DONE
-//		posX = 11.0f;
-//
-		// Set initial position of zombie.
-//		target.transform.position = new Vector3 (posX, posY);
+
+		int i = Random.Range(0, arrayVinyls.Length);
+		self.GetComponent<SpriteRenderer>().sprite = arrayVinyls[i];
+		spinner.GetComponent<SpriteRenderer> ().sprite = arrayVinyls [i];
 
 		target = new Vector3 (Random.Range (-8.7f, 0.0f), -3.9f);
+
 	}
 	
 	// Update is called once per frame
@@ -47,26 +44,27 @@ public class VinylBehavior : MonoBehaviour {
 		}
 
 		if (state == 2) {
-//			Vector3 move = new Vector3 (self.AddForce, Input.GetAxis ("Vertical"), 0.0f);
-//			transform.position += move * speed * Time.deltaTime;
-			self.AddForce(transform.right * 10.0f);
-		}
+			spinner.GetComponent<Renderer>().enabled = true;
+			self.GetComponent<Renderer>().enabled = false;
+			moveDirection = new Vector3(0.5f, 0.0f, 0.0f);
+			self.transform.Translate(moveDirection);
 
-		if (self.position.x > 12.0f) {
-			Destroy (self.gameObject);
-			vinylGen.CreateVinyl();
 		}
 	}
 
 	void OnTriggerEnter2D (Collider2D other){
 
 		if (other.gameObject.CompareTag ("Player")) {
-			this.transform.position = other.transform.position;
-//			state = 1;
+//			this.transform.position = other.transform.position;
 			player = other.attachedRigidbody;
 		}
+
+		if (other.gameObject.CompareTag ("Zombie") && state == 2) {
+			Destroy (other.gameObject);
+			soundFX.Play();
+			smash.Play ();
+			this.transform.position = new Vector3 (12.1f, 0.0f, 0.0f);
+		}
 	}
-
-
 
 }

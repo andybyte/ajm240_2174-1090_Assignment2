@@ -8,14 +8,13 @@ public class PlayerController : MonoBehaviour {
 	public int speed;
 	public AudioSource crashSound;
 	private SpriteRenderer playerSprite ;
+	private VinylBehavior script;
+	private bool keypress;
+	private bool contact;
+	public Camera camera;
+	private Rigidbody2D vinyl;
 	private string spriteDirection;
 
-	private Rigidbody2D vinyl;
-
-
-//	public float pickUpDistance = 1.0f;
-//	private Transform carriedVinyl = null;
-//	private int pickupLayer = 1; //<< LayerMask.NameToLayer( "Pickup" );
 
 
 	// Use this for initialization
@@ -23,17 +22,21 @@ public class PlayerController : MonoBehaviour {
 		player = GetComponent<Rigidbody2D>();
 		playerSprite = GetComponent<SpriteRenderer> ();
 		spriteDirection = "right";
+		contact = false;
 	}
 
 	void Update () {
+
+		Vector3 screenPos = camera.WorldToScreenPoint(player.position);
+
 		Vector3 move = new Vector3 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"), 0.0f);
 
 		// Prevent player from moving off the level.
 
-		if (player.position.x < -9.4f & move.x < 0.0f) {
+		if (screenPos.x < 30 & move.x < 0.0f) {
 			move.x = 0.0f;
 		} 
-		if (player.position.x > 9.21f & move.x > 0.0f) {
+		if (screenPos.x > 1200 & move.x > 0.0f) {
 			move.x = 0.0f;
 		} 
 		if (player.position.y > 4.1f & move.y > 0.0f) {
@@ -48,60 +51,50 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 			spriteDirection = "left";
 			playerSprite.flipX = false;
-//			transform.localRotation = Quaternion.Euler (0, 180, 0);
 		} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
 			spriteDirection = "right";
 			playerSprite.flipX = true;
 		}
 
 		if (Input.GetKeyDown (KeyCode.Mouse0)) {
-			var script = vinyl.GetComponent<VinylBehavior> ();
-			script.state = 2;
+			keypress = true;
 		}
+		if (Input.GetKeyUp (KeyCode.Mouse0)) {
+			keypress = false;
+		}
+
+		if (Input.GetKeyDown (KeyCode.Mouse0)) {
+			if (contact == true && keypress == true) {
+				script.state = 1;
+				contact = false;
+				keypress = false;
+			}
+		}
+		if (Input.GetKeyDown (KeyCode.Mouse1)) {
+			if (script.state == 1) {
+				script.state = 2;
+			}
+		}
+
+
+			
 	}
-	
-	// Update is called once per frame
-//	void FixedUpdate () {
-//	}
 
 	void OnTriggerEnter2D (Collider2D other){
 		if (other.gameObject.CompareTag ("Zombie")) {
 			crashSound.Play();
 			Destroy (other.gameObject);
 		}
-
 		if (other.gameObject.CompareTag ("vinyl")) {
 			vinyl = other.GetComponent<Rigidbody2D> ();
-			var script = other.GetComponent<VinylBehavior>();
-			script.state = 1;
-//			other.transform.position = this.transform.position;
+			script = other.GetComponent<VinylBehavior>();
+			contact = true;
 		}
 	}
 
-
-		
-
-//	private void PickUpVinyl() {
-//		Collider[] pickups = Physics.OverlapSphere (transform.position, pickUpDistance, pickupLayer);
-//
-//
-//		// Find the closest
-//		float dist = Mathf.Infinity;
-//		for (int i = 0; i < pickups.Length; i++) {
-//			float newDist = (transform.position - pickups [i].transform.position).sqrMagnitude;
-//			if (newDist < dist) {
-//				carriedVinyl = pickups [i].transform;
-//				dist = newDist;
-//			}
-//		}
-//
-//		if (carriedVinyl != null) { // Check if we found something
-//			// Set the box in front of character
-//			Destroy (carriedVinyl.GetComponent<Rigidbody>());
-//			carriedVinyl.parent = transform;
-//			carriedVinyl.localPosition = new Vector3 (0, 1f, 1f); // Might need to change that 
-//		}
-//	}
-
-		
+	void OnTriggerExit2D (Collider2D other) {
+		if (other.gameObject.CompareTag ("vinyl")) {
+			contact = false;
+		}
+	}		
 }

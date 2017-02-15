@@ -5,28 +5,37 @@ using UnityEngine;
 public class VinylGenerator : MonoBehaviour {
 
 	public Rigidbody2D vinyl;
-	public int counter;
+	private Rigidbody2D vinylClone;
+	public AudioSource soundFX;
+	public AudioSource smash;
+	public Rigidbody2D spinner;
 
 	// Use this for initialization
 	void Start () {
-
-		// Initialize counter.
-		counter = 0;
+		spinner.GetComponent<Renderer>().enabled = false;
+		CreateVinyl ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if (counter == 0) {
-			counter++;
+		spinner.position = vinylClone.position;
 
-			Rigidbody2D vinylClone = (Rigidbody2D)Instantiate (vinyl, transform.position, transform.rotation);
-
+		if (vinylClone.position.x > 12.0f) {
+			Destroy (vinylClone.gameObject);
+			CreateVinyl ();
 		}
 		
 	}
 
-	public void CreateVinyl() {
-		Rigidbody2D vinylClone = (Rigidbody2D)Instantiate (vinyl, transform.position, transform.rotation);
+	private void CreateVinyl() {
+		
+		vinylClone = (Rigidbody2D)Instantiate (vinyl, transform.position, transform.rotation);
+		vinylClone.GetComponent<VinylBehavior> ().soundFX = soundFX;
+		vinylClone.GetComponent<VinylBehavior> ().spinner = spinner;
+		vinylClone.GetComponent<VinylBehavior> ().smash = smash;
+
+		spinner.GetComponent<Renderer>().enabled = false;
+		vinylClone.GetComponent<Renderer>().enabled = true;
 	}
 }
