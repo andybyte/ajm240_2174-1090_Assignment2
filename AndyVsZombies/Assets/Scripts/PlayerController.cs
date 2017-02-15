@@ -29,42 +29,52 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		// UI
 		winner.text = " ";
 		dinner.text = " ";
 
+		// Player elements.
 		player = GetComponent<Rigidbody2D>();
 		playerSprite = GetComponent<SpriteRenderer> ();
 		spriteDirection = "right";
+
+		// Contact with vinyl.
 		contact = false;
+
+		// Game Stats.
 		intLives = 5;
 		intKills = 0;
+
+		// Update UI.
 		UpdateKills (intKills);
 		UpdateLives (intLives);
 	}
 
 	void Update () {
 
-		Vector3 screenPos = camera.WorldToScreenPoint(player.position);
-
+		// Movement 
 		Vector3 move = new Vector3 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"), 0.0f);
 
-		// Prevent player from moving off the level.
+			// Use camera.WorldToScreenPoint to set boundaries of player and prevent player from moving off the level..
+			Vector3 screenPos = camera.WorldToScreenPoint(player.position);
 
-		if (screenPos.x < 30 & move.x < 0.0f) {
-			move.x = 0.0f;
-		} 
-		if (screenPos.x > 1250 & move.x > 0.0f) {
-			move.x = 0.0f;
-		} 
-		if (player.position.y > 4.1f & move.y > 0.0f) {
-			move.y = 0.0f;
-		} 
-		if (player.position.y < -3.83f & move.y < 0.0f) {
-			move.y = 0.0f;
-		}
+			if (screenPos.x < 30 & move.x < 0.0f) {
+				move.x = 0.0f;
+			} 
+			if (screenPos.x > 1250 & move.x > 0.0f) {
+				move.x = 0.0f;
+			} 
+			if (player.position.y > 4.1f & move.y > 0.0f) {
+				move.y = 0.0f;
+			} 
+			if (player.position.y < -3.83f & move.y < 0.0f) {
+				move.y = 0.0f;
+			}
 
-		transform.position += move * speed * Time.deltaTime;
+			transform.position += move * speed * Time.deltaTime;
 
+		// Adjust sprite direction.
 		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 			spriteDirection = "left";
 			playerSprite.flipX = false;
@@ -73,6 +83,7 @@ public class PlayerController : MonoBehaviour {
 			playerSprite.flipX = true;
 		}
 
+		// Detect if player is pressing mouse button.
 		if (Input.GetKeyDown (KeyCode.Mouse0)) {
 			keypress = true;
 		}
@@ -80,6 +91,7 @@ public class PlayerController : MonoBehaviour {
 			keypress = false;
 		}
 
+		// Detect if player is pressing mouse button and in contact with vinyl. If so change state of vinyl to Carry Mode.
 		if (Input.GetKeyDown (KeyCode.Mouse0)) {
 			if (contact == true && keypress == true) {
 				script.state = 1;
@@ -87,24 +99,33 @@ public class PlayerController : MonoBehaviour {
 				keypress = false;
 			}
 		}
+
+		// If player has vinyl, mouse click throws the vinyl.
 		if (Input.GetKeyDown (KeyCode.Mouse1)) {
 			if (script.state == 1) {
 				script.state = 2;
 			}
 		}
 
+		// Update Kills UI.
 		UpdateKills (intKills); 
 			
 	}
 
 	void OnTriggerEnter2D (Collider2D other){
+
+		// If player collides with a zombie, reset player position, play sound, and decrease lives by 1. End game if Lives = 0.
 		if (other.gameObject.CompareTag ("Zombie")) {
+			
 			collisionSound.Play();
 			zombieBite.Play ();
+
 			intLives -= 1;
 			UpdateLives (intLives);
+
 			Vector3 pos = new Vector3(-5.0f,0.0f,0.0f);
 			player.transform.position = pos;
+
 			Destroy (other.gameObject);
 
 			if (intLives == 0) {
@@ -113,6 +134,8 @@ public class PlayerController : MonoBehaviour {
 
 			}
 		}
+
+		// Detect if player is in contact with vinyl and capture object.
 		if (other.gameObject.CompareTag ("vinyl")) {
 			vinyl = other.GetComponent<Rigidbody2D> ();
 			script = other.GetComponent<VinylBehavior>();
@@ -120,12 +143,14 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	// Reset contact status to false if the player leaves the vinyl location.
 	void OnTriggerExit2D (Collider2D other) {
 		if (other.gameObject.CompareTag ("vinyl")) {
 			contact = false;
 		}
 	}		
 
+	// Update UI.
 	void UpdateLives(int count) {
 		lives.text = "Lives " + count;
 	}

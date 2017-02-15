@@ -12,6 +12,8 @@ public class FieldController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		// Missed Zombie init.
 		intMiss = 0;
 		UpdateMisses (intMiss);
 		loser.text = "";
@@ -23,6 +25,8 @@ public class FieldController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D other){
+
+		// Count missed zombies and end game if 5 get through.
 		if (other.gameObject.CompareTag ("Zombie")) {
 			zombieLeft.Play();
 			intMiss += 1;
@@ -36,6 +40,7 @@ public class FieldController : MonoBehaviour {
 		}
 	}
 
+	// Update Missed Zombie UI.
 	void UpdateMisses (int count) {
 		misses.text = "Misses: " + intMiss + "/5";
 	}

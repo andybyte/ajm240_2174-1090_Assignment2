@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RotateVinyl : MonoBehaviour {
 
-	// Update is called once per frame
+	// Rotate spinner vinyl.
 	void Update () {
 		Vector3 rotation = new Vector3 (0, 0, -45);
 

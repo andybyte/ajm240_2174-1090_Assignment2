@@ -10,13 +10,13 @@ public class VinylGenerator : MonoBehaviour {
 	public AudioSource smash;
 	public Rigidbody2D spinner;
 
-	// Use this for initialization
+	// Create vinyl and hide spinner.
 	void Start () {
 		spinner.GetComponent<Renderer>().enabled = false;
 		CreateVinyl ();
 	}
 	
-	// Update is called once per frame
+	// Keep spinner with core vinyl. If vinyl leaves screen destroy it and create another.
 	void Update () {
 
 		spinner.position = vinylClone.position;
@@ -28,6 +28,7 @@ public class VinylGenerator : MonoBehaviour {
 		
 	}
 
+	// Create a vinyl record and pass on objects VinylBehavior needs.
 	private void CreateVinyl() {
 		
 		vinylClone = (Rigidbody2D)Instantiate (vinyl, transform.position, transform.rotation);
@@ -35,6 +36,7 @@ public class VinylGenerator : MonoBehaviour {
 		vinylClone.GetComponent<VinylBehavior> ().spinner = spinner;
 		vinylClone.GetComponent<VinylBehavior> ().smash = smash;
 
+		// Show core vinyl and hide spinner until we throw it.
 		spinner.GetComponent<Renderer>().enabled = false;
 		vinylClone.GetComponent<Renderer>().enabled = true;
 	}

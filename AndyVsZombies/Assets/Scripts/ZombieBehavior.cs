@@ -25,7 +25,7 @@ public class ZombieBehavior : MonoBehaviour {
 		transform.position = new Vector3 (posX, posY);
 	}
 	
-	// Update is called once per frame.
+	// Move zombie along.
 
 	void Update () {
 		transform.position = new Vector3 (transform.position.x - speed, posY);
