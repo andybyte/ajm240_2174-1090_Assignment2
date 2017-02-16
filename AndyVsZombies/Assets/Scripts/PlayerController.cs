@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 	private VinylBehavior script;
 	private bool keypress;
 	private bool contact;
-	public Camera camera;
+	private bool carrying;
 	private Rigidbody2D vinyl;
 	private string spriteDirection;
 
@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour {
 
 		// Contact with vinyl.
 		contact = false;
+		carrying = false;
 
 		// Game Stats.
 		intLives = 5;
@@ -56,12 +57,11 @@ public class PlayerController : MonoBehaviour {
 		// Movement 
 		Vector3 move = new Vector3 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"), 0.0f);
 
-			// Use camera.WorldToScreenPoint to set boundaries of player and prevent player from moving off the level..
-			Vector3 screenPos = camera.WorldToScreenPoint(player.position);
-			if (screenPos.x < 30 & move.x < 0.0f) {
+			// Prevent player from moving off the level..
+			if (player.position.x < -9.0f & move.x < 0.0f) {
 				move.x = 0.0f;
 			} 
-			if (screenPos.x > 907 & move.x > 0.0f) {
+			if (player.position.x > 8.9f & move.x > 0.0f) {
 				move.x = 0.0f;
 			} 
 			if (player.position.y > 4.1f & move.y > 0.0f) {
@@ -94,6 +94,7 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Mouse0)) {
 			if (contact == true && keypress == true) {
 				script.state = 1;
+				carrying = true;
 				contact = false;
 				keypress = false;
 			}
@@ -103,6 +104,7 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Mouse1)) {
 			if (script.state == 1) {
 				script.state = 2;
+				carrying = false;
 			}
 		}
 
@@ -124,6 +126,12 @@ public class PlayerController : MonoBehaviour {
 
 			Vector3 pos = new Vector3(-5.0f,0.0f,0.0f);
 			player.transform.position = pos;
+
+			// If player has a vinyl, set it's position off screen so the generator recreates it.
+			if (carrying == true) {
+				Vector3 resetVinyl = new Vector3 (14.0f, 0.0f, 0.0f);
+				vinyl.transform.position = resetVinyl;
+			}
 
 			Destroy (other.gameObject);
 
