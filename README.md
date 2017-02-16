@@ -11,6 +11,7 @@ Gif to Sprite:
 
 Sound Effects
 * [Horror SFX (on Unity Asset Store)](https://www.assetstore.unity3d.com/en/#!/content/32834).
+* [Breaking Plate](https://freesound.org/people/jorickhoofd/sounds/179250/).
 
 Background
 * Photo I took in Oakland (PGH,PA).
