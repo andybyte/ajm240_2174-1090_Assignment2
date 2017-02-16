@@ -2,6 +2,10 @@
 
 Inspired by plants versus zombies game about dodging and killing zombies.
 
+## Known issues
+
+[ ] Boundaries do not work for player or vinyl generator on the X axis when built for the web.
+
 ## Sources
 Music:
 * [Thriller Midi](http://www.midiworld.com/files/295/).
