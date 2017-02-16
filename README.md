@@ -16,5 +16,7 @@ Background
 * Photo I took in Oakland (PGH,PA).
 
 ## Bonus Points
+
 [x] Randomized speed.
+
 [x] Turn thrown object.
